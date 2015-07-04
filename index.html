@@ -28,7 +28,6 @@
 			<th>vCPU</th>
 			<th>On-Demand Price</th>
 			<th>Spot Price</th>
-		
 			<% _.each(collection, function(model){ %>
 				<tr>
 					<td><%= model.pricevCPU %></td>
@@ -38,7 +37,6 @@
 					<td><%= model.vCPU %></td>
 					<td><%= model.onDemandPrice %></td>
 					<td><%= model.spotPrice %></td>
-					
 				</tr>
 			<% }) %>
 			</table>

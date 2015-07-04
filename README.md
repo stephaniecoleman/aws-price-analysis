@@ -16,5 +16,6 @@ python -m SimpleHTTPServer
 ## Notes
 + Things I plan to work on include:
   + Write tests
+  + Clean up views - move all logic into models
   + Integrate Express
   + Integrate RequireJS

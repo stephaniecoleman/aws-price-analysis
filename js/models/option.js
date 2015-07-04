@@ -44,7 +44,6 @@ var OptionCollection = Backbone.Collection.extend({
 		}	
 		return dataArray;
 	},
-
 	getData: function(spotList){
 		this.setSpotPrices(spotList);
 		this.calculatePriceSpread();
@@ -86,22 +85,18 @@ var OptionCollection = Backbone.Collection.extend({
 			option.set('pricevCPU', pricevCPU);
 		})
 	},
-
 	sortByRegion: function() {
 		this.order = "region";
 		this.sort();
 	},
-
 	sortByType: function() {
 		this.order = "type";
 		this.sort();
 	},
-
 	sortByPricevCPU: function() {
 		this.order = "pricevCPU";
 		this.sort();
 	},
-
 	findCheapestRegion: function() {
 		// get list of regions
 		var regions = _.uniq(this.pluck('region'));
