@@ -6,9 +6,23 @@ var OptionModel = Backbone.Model.extend({
 			onDemandvCPU: "-"
 		}
 	});
+
 var OptionCollection = Backbone.Collection.extend({
 	model: OptionModel,
+	order: 'region',
+	// sort by region then type or by type then region
+	comparator: function(option) {
+		if (this.order === 'region') {
+			return [option.get('region'), option.get('type')];
+		} else if (this.order === 'type') {
+			return [option.get('type'), option.get('region')];
+		} else {
+			return option.get('onDemandvCPU');
+		}
+	},
+
 	url: "http://a0.awsstatic.com/pricing/1/ec2/linux-od.min.js",
+
 	parse: function(response){
 		var dataArray = [];
 		var regions = response['config']['regions'];
@@ -33,6 +47,7 @@ var OptionCollection = Backbone.Collection.extend({
 		}	
 		return dataArray;
 	},
+
 	getData: function(spotList){
 		this.setSpotPrices(spotList);
 		this.calculatePriceSpread();
@@ -56,7 +71,9 @@ var OptionCollection = Backbone.Collection.extend({
 			if (!isNaN(spot)) {
 				var onDemand = option.get('onDemandPrice');
 				var spread = onDemand - spot;
-				option.set('priceSpread', spread);
+
+
+				option.set('priceSpread', Math.round(spread*1000)/1000);
 			}
 		});
 	},
@@ -80,8 +97,20 @@ var OptionCollection = Backbone.Collection.extend({
 			}
 		});
 	},
-	sortByRegion: function(){
-		debugger;
+
+	sortByRegion: function() {
+		this.order = "region";
+		this.sort();
 	},
+
+	sortByType: function() {
+		this.order = "type";
+		this.sort();
+	},
+
+	sortByvCPU: function() {
+		this.order = "vCPU";
+		this.sort();
+	}
 
 })

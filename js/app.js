@@ -17,7 +17,8 @@ function populateOptions() {
 		success: function(data) {
 	    console.log("Rest of data collected.");
 	    optionList.getData(spotList);
-	    optionView = new OptionListView({collection: optionList});
+	    var optionView = new OptionListView({collection: optionList});
+	    var vCPUView = new VCPURateView({collection: optionList});
 	  }
 	});
 }

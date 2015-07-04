@@ -1,35 +1,68 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>AWS Price Analysis</title>  
+    <title>AWS Price Analysis</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 </head>
 <body>
-
-<div id="container">
-</div>
-
-<script type="text/template" id="option-tmpl">
-		<% _.each(collection, function(model){ %>
-		<p>
-		Region: <%= model.region %><br>
-		Type: <%= model.type %><br>
-		Size: <%= model.size %><br>
-		vCPU: <%= model.vCPU %><br>
-		On Demand Price: <%= model.onDemandPrice %><br>
-		Spot Price: <%= model.spotPrice %><br>
-		Price Spread: <%= model.priceSpread %><br>
-		Spot Price / vCPU: <%= model.spotvCPU %><br>
-		On-Demand Price / vCPU : <%= model.onDemandvCPU %><br>
-		ID: <%= model.label %><br>
-		</p>
-		<% }) %>
-</script>
+	<div class="container">
+		<div id="vCPU-container">
+		</div>
+		<div id="spread-container">
+		</div>
+	</div>
+	<script type="text/template" id="vCPU-tmpl">
+		<h3>Top 10 price per vCPU instances across all regions</h3>
+		<table class="table">
+			<th>On-Demand Price / vCPU</th>
+			<th>Region</th>
+			<th>Type</th>
+			<th>Size</th>
+			<th>On-Demand Price</th>
+			<th>vCPU</th>
+			<% _.each(collection, function(model){ %>
+				<tr>
+					<td><%= model.onDemandvCPU %></td>
+					<td><%= model.region %></td>
+					<td><%= model.type %></td>
+					<td><%= model.size %></td>
+					<td><%= model.onDemandPrice %></td>
+					<td><%= model.vCPU %></td>
+				</tr>
+			<% }) %>
+			</table>
+	</script>
+	<script type="text/template" id="option-tmpl">
+		<h3>On-Demand/Spot price spread by instance type and region</h3>
+		<table class="table">
+			<tr>
+				<th><button class="btn btn-default" type="button" id="sortByRegion">Sort By Region</button></th>
+				<th><button class="btn btn-default" type="button" id="sortByType">Sort By Type</button></th>
+				<th>On-Demand Price</th>
+				<th>Spot Price</th>
+				<th>Price Spread</th>
+			</tr>
+			<% _.each(collection, function(model){ %>
+				<% if (model.spotPrice == "-") { %>
+					<% return %>
+				<% } %>
+				<tr>
+					<td><%= model.region %></td>
+					<td><%= model.type %></td>
+					<td><%= model.onDemandPrice %></td>
+					<td><%= model.spotPrice %></td>
+					<td><%= model.priceSpread %></td>
+				</tr>
+			<% }) %>
+		</table>
+	</script>
   <script src="js/libs/jquery-2.1.4.min.js"></script>
   <script src="js/libs/underscore.min.js"></script>
   <script src="js/libs/backbone.min.js"></script>
-  <script src="js/models/option.js"></script>
+  <script src="js/models/option.js"></script> 
   <script src="js/models/spot_option.js"></script>
-  <script src="js/views/appview.js"></script>
+  <script src="js/views/option_view.js"></script>
+  <script src="js/views/vcpu_view.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
