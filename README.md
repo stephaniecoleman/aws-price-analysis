@@ -13,7 +13,7 @@ Spot: [http://spot-price.s3.amazonaws.com/spot.js](http://spot-price.s3.amazonaw
 ## Run
 
 ## Notes
-- Things I would like to work on include:
-1. Write tests
-2. Integrate Express
-3. Integrate RequireJS
++ Things I plan to work on include:
+  + Write tests
+  + Integrate Express
+  + Integrate RequireJS
