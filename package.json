@@ -1,11 +1,11 @@
 {
-    "name": "priceanalysis",
+    "name": "awspriceanalysis",
     "description": "A Backbone.js app that displays pricing analysis information between Spot Instances and EC2 from Amazon’s public API endpoints.",
     "version": "0.0.1",
     "author": "Stephanie Coleman",
     "repository": {
     	"type": "git",
-    	"url": "https://github.com/stephaniecoleman"
+    	"url": "https://github.com/stephaniecoleman/aws-price-analysis"
     },
     "dependencies": {
         // "express": "4.13"
