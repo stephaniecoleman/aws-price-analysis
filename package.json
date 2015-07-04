@@ -8,6 +8,6 @@
     	"url": "https://github.com/stephaniecoleman"
     },
     "dependencies": {
-        "express": "4.13"
+        // "express": "4.13"
     }
 }
