@@ -2,7 +2,7 @@ var VCPURateView = Backbone.View.extend({
 	el: '#vCPU-container',
 	template : _.template($('#vCPU-tmpl').html()),
 	initialize : function() {
-		this.collection.sortByvCPU();
+		this.collection.sortByPricevCPU();
 		this.render();
 	},
 	render : function() {

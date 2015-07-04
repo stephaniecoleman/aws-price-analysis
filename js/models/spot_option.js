@@ -22,7 +22,8 @@ var SpotCollection = Backbone.Collection.extend({
 					var dataObject = {
 						spotPrice: parseFloat(size['valueColumns'][0]['prices']['USD']) 
 					}
-					var label = [regionVal, type['type'], size['size']].join("-");
+					var typeVal = type['type'].split("CurrentGen")[0];
+					var label = [regionVal, typeVal, size['size']].join("-");
 					dataObject.label = label;
 					dataArray.push(dataObject);
 				}

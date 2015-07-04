@@ -2,8 +2,7 @@ var OptionModel = Backbone.Model.extend({
 		defaults: {
 			spotPrice: "-",
 			priceSpread: "-",
-			spotvCPU: "-",
-			onDemandvCPU: "-"
+			pricevCPU: "-"
 		}
 	});
 
@@ -17,7 +16,7 @@ var OptionCollection = Backbone.Collection.extend({
 		} else if (this.order === 'type') {
 			return [option.get('type'), option.get('region')];
 		} else {
-			return option.get('onDemandvCPU');
+			return option.get('pricevCPU');
 		}
 	},
 
@@ -34,7 +33,7 @@ var OptionCollection = Backbone.Collection.extend({
 					var size = type['sizes'][k];
 					var dataObject = {
 						region: region['region'],
-						type: type['type'],
+						type: type['type'].split("CurrentGen")[0],
 						size: size['size'],
 						vCPU: parseInt(size['vCPU']),
 						onDemandPrice: parseFloat(size['valueColumns'][0]['prices']['USD']) 
@@ -51,8 +50,7 @@ var OptionCollection = Backbone.Collection.extend({
 	getData: function(spotList){
 		this.setSpotPrices(spotList);
 		this.calculatePriceSpread();
-		this.calculateSpotvCPU();
-		this.calculateOnDemandvCPU();
+		this.calculatePricevCPU();
 	},
 	setSpotPrices: function(spotList) {
 		this.each(function(option) {
@@ -71,32 +69,51 @@ var OptionCollection = Backbone.Collection.extend({
 			if (!isNaN(spot)) {
 				var onDemand = option.get('onDemandPrice');
 				var spread = onDemand - spot;
-
-
 				option.set('priceSpread', Math.round(spread*1000)/1000);
 			}
 		});
 	},
-	calculateSpotvCPU: function() {
-		this.each(function(option) {
+	// grab cheaper rate per vCPU between spot and on-demand instances
+	calculatePricevCPU: function() {
+		this.each(function(option){
 			var spot = option.get('spotPrice');
-			if (!isNaN(spot)) {
-				var vCPU = option.get('vCPU');
-				var spotvCPU = spot / vCPU;
-				option.set('spotvCPU', spotvCPU);
-			}
-		});
-	},
-	calculateOnDemandvCPU: function() {
-		this.each(function(option) {
 			var onDemand = option.get('onDemandPrice');
-			if (!isNaN(onDemand)) {
-				var vCPU = option.get('vCPU');
-				var onDemandvCPU = onDemand / vCPU;
-				option.set('onDemandvCPU', onDemandvCPU);
+			var vCPU = option.get('vCPU');
+			var pricevCPU;
+			if (!isNaN(spot) && spot < onDemand) {
+				pricevCPU = spot / vCPU;
+			} else {
+				pricevCPU = onDemand / vCPU;
 			}
-		});
+			option.set('pricevCPU', pricevCPU);
+		})
 	},
+
+	// calculateSpotvCPU: function() {
+	// 	this.each(function(option) {
+	// 		var spot = option.get('spotPrice');
+	// 		if (!isNaN(spot)) {
+	// 			var vCPU = option.get('vCPU');
+	// 			var spotvCPU = spot / vCPU;
+	// 			option.set('spotvCPU', spotvCPU);
+	
+	// 		}	else {
+	// 			option.set('spotvCPU', 2000);
+	// 		}
+	// 	});
+	// },
+	// calculateOnDemandvCPU: function() {
+	// 	this.each(function(option) {
+	// 		var onDemand = option.get('onDemandPrice');
+	// 		if (!isNaN(onDemand)) {
+	// 			var vCPU = option.get('vCPU');
+	// 			var onDemandvCPU = onDemand / vCPU;
+	// 			option.set('onDemandvCPU', onDemandvCPU);
+	// 		} else {
+	// 			option.set('onDemandvCPU', 2000);
+	// 		}
+	// 	});
+	// },
 
 	sortByRegion: function() {
 		this.order = "region";
@@ -108,9 +125,14 @@ var OptionCollection = Backbone.Collection.extend({
 		this.sort();
 	},
 
-	sortByvCPU: function() {
-		this.order = "vCPU";
+	sortByPricevCPU: function() {
+		this.order = "pricevCPU";
 		this.sort();
-	}
+	},
+
+	// sortBySpotvCPU: function() {
+	// 	this.order = "spotvCPU";
+	// 	this.sort();
+	// }
 
 })
