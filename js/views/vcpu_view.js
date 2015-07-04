@@ -14,4 +14,3 @@ var VCPURateView = Backbone.View.extend({
 		return new Backbone.Collection(this.collection.first(10));
 	}
 })
-

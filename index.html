@@ -6,13 +6,20 @@
 </head>
 <body>
 	<div class="container">
+		<div id="cheapest-container">
+		</div>
 		<div id="vCPU-container">
 		</div>
 		<div id="spread-container">
 		</div>
 	</div>
+	<script type="text/template" id="cheapest-tmpl">
+		<h3>Cheapest Region Overall</h3>
+		Region: <%= model.name %><br>
+		Average Price/vCPU: <%= model.average %>
+	</script>
 	<script type="text/template" id="vCPU-tmpl">
-		<h3>Top 10 prices per vCPU instances across all regions</h3>
+		<h3>Top 10 Prices per vCPU Instances Across All Regions</h3>
 		<table class="table">
 			<th>Price/vCPU (based on Spot Price)</th>
 			<th>Region</th>
@@ -37,7 +44,7 @@
 			</table>
 	</script>
 	<script type="text/template" id="option-tmpl">
-		<h3>On-Demand/Spot price spread by instance type and region</h3>
+		<h3>On-Demand/Spot Price Spread by Instance Type and Region</h3>
 		<table class="table">
 			<tr>
 				<th><button class="btn btn-default" type="button" id="sortByRegion">Sort By Region</button></th>
@@ -71,6 +78,7 @@
   <script src="js/models/spot_option.js"></script>
   <script src="js/views/option_view.js"></script>
   <script src="js/views/vcpu_view.js"></script>
+  <script src="js/views/cheapest_view.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

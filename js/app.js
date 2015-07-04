@@ -19,6 +19,7 @@ function populateOptions() {
 	    optionList.getData(spotList);
 	    var optionView = new OptionListView({collection: optionList});
 	    var vCPUView = new VCPURateView({collection: optionList});
+	    var cheapestView = new CheapestView({collection: optionList});
 	  }
 	});
 }

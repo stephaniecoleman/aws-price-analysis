@@ -19,9 +19,7 @@ var OptionCollection = Backbone.Collection.extend({
 			return option.get('pricevCPU');
 		}
 	},
-
 	url: "http://a0.awsstatic.com/pricing/1/ec2/linux-od.min.js",
-
 	parse: function(response){
 		var dataArray = [];
 		var regions = response['config']['regions'];
@@ -89,32 +87,6 @@ var OptionCollection = Backbone.Collection.extend({
 		})
 	},
 
-	// calculateSpotvCPU: function() {
-	// 	this.each(function(option) {
-	// 		var spot = option.get('spotPrice');
-	// 		if (!isNaN(spot)) {
-	// 			var vCPU = option.get('vCPU');
-	// 			var spotvCPU = spot / vCPU;
-	// 			option.set('spotvCPU', spotvCPU);
-	
-	// 		}	else {
-	// 			option.set('spotvCPU', 2000);
-	// 		}
-	// 	});
-	// },
-	// calculateOnDemandvCPU: function() {
-	// 	this.each(function(option) {
-	// 		var onDemand = option.get('onDemandPrice');
-	// 		if (!isNaN(onDemand)) {
-	// 			var vCPU = option.get('vCPU');
-	// 			var onDemandvCPU = onDemand / vCPU;
-	// 			option.set('onDemandvCPU', onDemandvCPU);
-	// 		} else {
-	// 			option.set('onDemandvCPU', 2000);
-	// 		}
-	// 	});
-	// },
-
 	sortByRegion: function() {
 		this.order = "region";
 		this.sort();
@@ -130,9 +102,26 @@ var OptionCollection = Backbone.Collection.extend({
 		this.sort();
 	},
 
-	// sortBySpotvCPU: function() {
-	// 	this.order = "spotvCPU";
-	// 	this.sort();
-	// }
+	findCheapestRegion: function() {
+		// get list of regions
+		var regions = _.uniq(this.pluck('region'));
+		var regionStats = [];
 
+		// get average pricevCPU for each region
+		for(var i = 0; i < regions.length; i++) {
+			var region = this.where({region: regions[i]});
+			var sum = 0;
+			for(var j = 0; j < region.length; j++) {
+				var pricevCPU = region[j].get('pricevCPU');
+				sum += pricevCPU;
+			}
+			var average = Math.round((sum / region.length) * 10000) / 10000;
+			var obj = {name: regions[i], average: average};
+			regionStats.push(obj);
+		}
+		// get cheapest region object.
+		var cheapest = _.min(regionStats, function(region){ return region.average; });
+
+		return new Backbone.Model(cheapest);
+	}
 })
